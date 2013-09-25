@@ -8,8 +8,10 @@ case class Commit(sha: String, author: String, header: String, body: String) {
 object GitHelper {
   def processGitCommits(gitDir: java.io.File, previousTag: String, currentTag: String): IndexedSeq[Commit] = {
     import sys.process._
+
     val gitFormat = "%h %s" // sha and subject
-    val log = Process(Seq("git", "--no-pager", "log", s"${previousTag}..${currentTag}", "--format=format:" + gitFormat, "--no-merges", "--topo-order"), gitDir).lines
+    val cmd = Seq("git", "--no-pager", "log", s"upstream/${previousTag}..upstream/${currentTag}", "--format=format:" + gitFormat, "--no-merges", "--topo-order")
+    val log = Process(cmd,gitDir).lines
 
     log.par.map(_.split(" ", 2)).collect {
       case Array(sha, title) =>
@@ -62,11 +64,13 @@ class GitInfo(gitDir: java.io.File, val previousTag: String, val currentTag: Str
   def renderCommitterList: String = {
     val sb = new StringBuffer
     sb append blankLine()
-    sb append header4("A big thank you to all the contributors!")
-    sb append targetLanguage.tableHeader("#", "Author")
+    sb append header4("Thanks to our contributors:")
+    sb append """<dl class="dl-horizontal">"""
+    sb append """ <dt style="width:60px;"># of Commits</dt><dd><strong>Author</strong></dd>"""
     for ((author, count) <- authors)
-      sb append targetLanguage.tableRow(count.toString, author)
-    sb append targetLanguage.tableEnd
+      sb append s"""<dt style="width:60px;">${count}</dt><dd>$author</dd>"""
+
+    sb append "</dl>"
     sb.toString
   }
 

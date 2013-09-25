@@ -55,13 +55,13 @@ object MakeReleaseNotes {
       <head>
         <meta charset="UTF-8">
         <title>${currentTag} - Release notes</title>
+<link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css" type="text/css" />
       </head>
       <body>
-        <h3>Scala ${currentTag drop 1} is now available!</h3>
+        <h3>GeoTrellis ${currentTag} is now available!</h3>
         ${parseHandWrittenNotes()}
         <br/><br/>
         ${renderCommitterList}
-        ${renderFixedIssues}
         ${renderCommitList}
       </body>
     </html>"""
