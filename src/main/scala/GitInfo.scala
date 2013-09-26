@@ -66,7 +66,7 @@ class GitInfo(gitDir: java.io.File, val previousTag: String, val currentTag: Str
     sb append blankLine()
     sb append header4("Thanks to our contributors:")
     sb append """<dl class="dl-horizontal">"""
-    sb append """ <dt style="width:60px;"># of Commits</dt><dd><strong>Author</strong></dd>"""
+    sb append """ <dt style="width:60px;">Commits</dt><dd><strong>Author</strong></dd>"""
     for ((author, count) <- authors)
       sb append s"""<dt style="width:60px;">${count}</dt><dd>$author</dd>"""
 
@@ -77,7 +77,7 @@ class GitInfo(gitDir: java.io.File, val previousTag: String, val currentTag: Str
   def renderCommitList: String = {
     val sb = new StringBuffer
     sb append blankLine()
-    sb append header4("Complete commit list!")
+    sb append header4("Complete commit list:")
     sb append targetLanguage.tableHeader("sha", "Title")
     for (commit <- commits)
       sb append targetLanguage.tableRow(commitShaLink(commit.sha), commit.trimmedHeader)
